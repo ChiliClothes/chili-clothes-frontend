@@ -1,0 +1,96 @@
+<aside class="w-full lg:w-96 sticky top-24 self-start">
+    <div class="bg-[#FFFFFF] rounded-xl border border-slate-200 shadow-xl overflow-hidden">
+        <!-- Cart Header -->
+        <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <h2 class="text-xl font-bold display-font">YOUR BAG</h2>
+                @if (cartService.itemCount() > 0) {
+                <span
+                    class="bg-[#E21D1D] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
+                    {{ cartService.itemCount() }}
+                </span>
+                }
+            </div>
+            @if (cartService.items().length > 0) {
+            <button (click)="clearAll()"
+                class="text-slate-400 hover:text-[#E21D1D] text-xs uppercase font-bold tracking-widest transition-colors">
+                Clear all
+            </button>
+            }
+        </div>
+
+        <!-- Cart Items -->
+        <div class="p-6 space-y-6 max-h-[400px] overflow-y-auto">
+            @if (cartService.items().length === 0) {
+            <div class="text-center py-8 text-slate-400">
+                <span class="material-icons text-6xl mb-2">shopping_bag</span>
+                <p class="text-sm">Your bag is empty</p>
+            </div>
+            }
+
+            @for (item of cartService.items(); track item.product.id) {
+            <div class="flex gap-4">
+                <img [src]="item.product.image" [alt]="item.product.name"
+                    class="w-20 h-20 object-cover rounded bg-[#FFFFFF]" />
+                <div class="flex-grow">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-bold display-font leading-none">{{ item.product.name }}</h4>
+                        <span class="font-bold text-[#E21D1D]">${{ item.product.price.toFixed(2) }}</span>
+                    </div>
+                    @if (item.color || item.size) {
+                    <p class="text-xs text-slate-500 mt-1 uppercase">
+                        {{ item.color }} @if (item.color && item.size) { / } {{ item.size }}
+                    </p>
+                    }
+                    <div class="flex items-center justify-between mt-3">
+                        <!-- Quantity Controls -->
+                        <div class="flex items-center border border-slate-200 rounded overflow-hidden">
+                            <button (click)="decreaseQuantity(item)"
+                                class="px-2 py-1 hover:bg-slate-100 transition-colors text-slate-500">
+                                <span class="material-icons text-xs">remove</span>
+                            </button>
+                            <span class="px-3 py-1 text-sm font-bold">{{ item.quantity }}</span>
+                            <button (click)="increaseQuantity(item)"
+                                class="px-2 py-1 hover:bg-slate-100 transition-colors text-slate-500">
+                                <span class="material-icons text-xs">add</span>
+                            </button>
+                        </div>
+                        <button (click)="removeItem(item)"
+                            class="text-[#E21D1D] text-xs font-bold uppercase hover:underline">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+
+        <!-- Cart Summary -->
+        @if (cartService.items().length > 0) {
+        <div class="p-6 bg-[#FFFFFF] space-y-4">
+            <div class="flex justify-between items-center text-sm font-medium">
+                <span class="text-slate-500">Subtotal</span>
+                <span class="font-bold">${{ cartService.subtotal().toFixed(2) }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm font-medium">
+                <span class="text-slate-500">Shipping (Standard)</span>
+                <span class="font-bold">${{ cartService.shipping().toFixed(2) }}</span>
+            </div>
+            <div class="pt-4 border-t border-slate-200 flex justify-between items-center">
+                <span class="display-font font-bold text-xl uppercase">Total</span>
+                <span class="display-font font-bold text-2xl text-[#E21D1D]">${{ cartService.total().toFixed(2)
+                    }}</span>
+            </div>
+            <button (click)="checkout()"
+                class="w-full py-4 bg-[#E21D1D] hover:bg-red-700 text-white font-bold display-font tracking-widest text-lg transition-colors flex items-center justify-center gap-3">
+                CHECKOUT
+                <span class="material-icons">arrow_forward</span>
+            </button>
+        </div>
+        }
+    </div>
+
+    <p class="mt-6 text-center text-xs text-slate-400 uppercase tracking-widest">
+        Official RHCP Store © 2024
+    </p>
+</aside>
