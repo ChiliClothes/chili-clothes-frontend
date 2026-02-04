@@ -5,5 +5,6 @@ export const routes: Routes = [
     {
         path: 'register',
         component: Register
-    }
+    },
+
 ];
