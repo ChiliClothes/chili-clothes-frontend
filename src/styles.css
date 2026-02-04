@@ -1,3 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@theme {
+    /* Custom Colors - Matching User Specifications */
+    --color-primary: #E21D1D;
+    --color-background-light: #F9FAFB;
+    --color-background-dark: #111111;
+    --color-card-light: #FFFFFF;
+    --color-card-dark: #1F1F1F;
+    --color-button-light: #F9FAFB;
+
+    /* Font Families */
+    --font-display: "Oswald", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-sans: "Inter", sans-serif;
+
+    /* Border Radius - Angular rock-and-roll feel */
+    --radius: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
+}
+
+/* Global Styles */
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-background-light);
+    min-height: 100vh;
+}
+
+html.dark body {
+    background-color: var(--color-background-dark);
+}
+
+::selection {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Display Font Utility */
+.display-font {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+}

@@ -1,0 +1,14 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background-color: #f8fafc;
+}
+
+.rhcp-logo-mask {
+  mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0L57 35H93L64 54L75 88L50 67L25 88L36 54L7 35H43L50 0Z" fill="black"/></svg>');
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
