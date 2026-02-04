@@ -1,0 +1,29 @@
+<div
+    class="bg-[#FFFFFF] rounded-xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all duration-300">
+    <!-- Product Image -->
+    <div class="relative h-72 overflow-hidden bg-[#FFFFFF]">
+        <img [src]="product.image" [alt]="product.name"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        @if (product.badge) {
+        <span class="absolute top-4 left-4 bg-[#E21D1D] text-white text-xs font-bold display-font px-3 py-1">
+            {{ product.badge }}
+        </span>
+        }
+    </div>
+
+    <!-- Product Info -->
+    <div class="p-6 bg-[#FFFFFF]">
+        <div class="flex justify-between items-start mb-2 gap-3 min-w-0">
+            <h3 class="text-xl font-bold display-font leading-tight flex-1 min-w-0 break-words">{{ product.name }}</h3>
+            <span class="text-[#E21D1D] font-bold text-lg shrink-0">${{ product.price.toFixed(2) }}</span>
+        </div>
+        <p class="text-sm text-slate-500 mb-6 line-clamp-2">
+            {{ product.description }}
+        </p>
+        <button (click)="onAddToCart()"
+            class="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 hover:bg-[#E21D1D] hover:text-white transition-all font-bold display-font">
+            <span class="material-icons text-xl">add_shopping_cart</span>
+            ADD TO BAG
+        </button>
+    </div>
+</div>
