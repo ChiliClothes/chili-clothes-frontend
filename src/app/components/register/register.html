@@ -1,13 +1,75 @@
-<main class="w-full h-screen flex justify-center items-center">
-    <form action="" class="w-1/2 h-1/2 bg-white rounded-lg shadow-lg">
-        <div class="flex flex-col gap-4">
-            <h1 class="text-2xl font-bold">Register</h1>
-            <input type="text" placeholder="Name" class="border border-gray-300 rounded-lg p-2">
-            <input type="email" placeholder="Email" class="border border-gray-300 rounded-lg p-2">
-            <input type="password" placeholder="Password" class="border border-gray-300 rounded-lg p-2">
-            <button type="submit" class="bg-blue-500 text-white rounded-lg p-2">Register</button>
+<main class="w-full h-screen flex flex-col  justify-start items-center p-10">
+
+    <div class="flex flex-col items-center mb-10">
+        <div class="mb-4 text-[#E21D1D]">
+            <svg fill="currentColor" height="80" viewBox="0 0 100 100" width="80" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M50 5L56.5 37L88 20L71 50L100 66.5L68 66.5L85 95L50 78L15 95L32 66.5L0 66.5L29 50L12 20L43.5 37L50 5Z">
+                </path>
+            </svg>
         </div>
+        <h1 class="font-display text-4xl font-bold uppercase tracking-widest text-slate-900">
+            RHCP <span class="text-[#E21D1D]">Shop</span>
+        </h1>
+        <p class="text-slate-600 mt-2 font-medium tracking-tight">
+            Access your official merchandise account
+        </p>
+    </div>
+
+    <form action="" class="w-1/4 p-10 bg-white rounded-lg shadow-lg space-y-6">
+
+        <div>
+            <label class="block text-sm font-semibold uppercase tracking-wider text-slate-700 mb-2" for="name">
+                Name
+            </label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span
+                        class="material-icons text-slate-400 group-focus-within:text-[#E21D1D] transition-colors text-lg">person</span>
+                </div>
+                <input
+                    class="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded focus:ring-2 focus:ring-[#E21D1D]/20 focus:border-[#E21D1D] outline-none transition-all placeholder:text-slate-400"
+                    id="name" formControlName="name" placeholder="RHCP Shop" type="text" />
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold uppercase tracking-wider text-slate-700 mb-2" for="email">
+                Email Address
+            </label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span
+                        class="material-icons text-slate-400 group-focus-within:text-[#E21D1D] transition-colors text-lg">mail</span>
+                </div>
+                <input
+                    class="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded focus:ring-2 focus:ring-[#E21D1D]/20 focus:border-[#E21D1D] outline-none transition-all placeholder:text-slate-400"
+                    id="email" formControlName="email" placeholder="flea@rhcp.com" type="email" />
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-sm font-semibold uppercase tracking-wider text-slate-700 mb-2" for="password">
+                Password
+            </label>
+            <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span
+                        class="material-icons text-slate-400 group-focus-within:text-[#E21D1D] transition-colors text-lg">lock</span>
+                </div>
+                <input
+                    class="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded focus:ring-2 focus:ring-[#E21D1D]/20 focus:border-[#E21D1D] outline-none transition-all placeholder:text-slate-400"
+                    id="password" formControlName="password" placeholder="••••••••" type="password" />
+            </div>
+        </div>
+
+        <button
+            class="w-full bg-[#E21D1D] hover:bg-red-700 text-white font-display text-l font-bold py-4 rounded transition-all transform active:scale-[0.98] shadow-lg shadow-[#E21D1D]/20 uppercase tracking-widest"
+            type="submit">
+            Register Now
+        </button>
     </form>
 
-    <app-button variant="danger">Register</app-button>
+    <p class="text-center mt-6 text-slate-600">Already have an account? <a href="/login"
+            class="text-[#E21D1D] font-semibold">Login</a></p>
 </main>
