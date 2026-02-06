@@ -19,7 +19,7 @@
             </div>
 
             <div class="space-y-6">
-                @for (order of orders; track order.id) {
+                @for (order of orders(); track order.id) {
                 <div
                     [class]="'bg-[#FFFFFF] rounded-xl border border-slate-200 p-8 flex flex-col sm:flex-row items-center gap-6 transition-all hover:shadow-2xl hover:border-slate-300 ' + (order.opacity || '')">
                     <div
@@ -46,7 +46,11 @@
                             class="px-6 py-3 border border-slate-200 rounded font-display font-bold text-xs uppercase tracking-widest hover:bg-slate-50 transition-all text-[#0F172A]">
                             Details
                         </button>
-                        @if (order.status !== 'Cancelled') {
+                        @if (order.status.toLowerCase() !== 'cancelled' && order.status.toLowerCase() !== 'cancelado') {
+                        <button (click)="cancelOrder(order.id)"
+                            class="px-6 py-3 border border-red-200 text-[#E21D1D] rounded font-display font-bold text-xs uppercase tracking-widest hover:bg-red-50 transition-all">
+                            Cancel
+                        </button>
                         <button
                             class="px-6 py-3 bg-[#E21D1D] text-white rounded font-display font-bold text-xs uppercase tracking-widest hover:bg-red-700 shadow-lg shadow-[#E21D1D]/20 transition-all transform active:scale-95">
                             Track
@@ -67,7 +71,7 @@
                 <div class="relative z-10 flex flex-col items-center">
                     <div class="relative mb-6">
                         <div class="w-32 h-32 rounded-full border-4 border-[#E21D1D] p-1 shadow-xl shadow-[#E21D1D]/10">
-                            <img [src]="user.avatar" alt="User Profile"
+                            <img [src]="user().avatar" alt="User Profile"
                                 class="w-full h-full object-cover rounded-full shadow-inner" />
                         </div>
                         <button
@@ -75,20 +79,21 @@
                             <span class="material-icons text-sm">edit</span>
                         </button>
                     </div>
-                    <h3 class="font-display text-2xl font-bold uppercase tracking-widest text-[#0F172A]">{{ user.name }}
+                    <h3 class="font-display text-2xl font-bold uppercase tracking-widest text-[#0F172A]">{{ user().name
+                        }}
                     </h3>
-                    <p class="text-slate-500 text-sm font-medium tracking-tight mb-6">{{ user.email }}</p>
+                    <p class="text-slate-500 text-sm font-medium tracking-tight mb-6">{{ user().email }}</p>
 
                     <div class="w-full h-px bg-slate-100 mb-8"></div>
 
                     <div class="grid grid-cols-2 gap-4 w-full">
                         <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 text-center shadow-sm">
                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Orders</p>
-                            <p class="text-3xl font-display font-bold text-[#0F172A]">{{ user.totalOrders }}</p>
+                            <p class="text-3xl font-display font-bold text-[#0F172A]">{{ user().totalOrders }}</p>
                         </div>
                         <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 text-center shadow-sm">
                             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Points</p>
-                            <p class="text-3xl font-display font-bold text-[#E21D1D]">{{ user.points }}</p>
+                            <p class="text-3xl font-display font-bold text-[#E21D1D]">{{ user().points }}</p>
                         </div>
                     </div>
 

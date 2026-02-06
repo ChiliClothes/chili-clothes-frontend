@@ -29,30 +29,25 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.socialAuthService.authState.subscribe((user) => {
-            if (user) {
-                console.log('Social User logged in:', user);
-                if (this.authService.loginWithSocialUser(user)) {
-                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/shop';
-                    this.router.navigate([returnUrl]);
-                }
-            }
-        });
+        // Social auth state subscription removed to focus on Backend API integration
     }
 
     onSubmit() {
-        // ... (existing code, keeping brief for replacement targeting)
         console.log('onSubmit called');
         this.errorMessage = '';
 
         if (this.loginForm.valid) {
             const { email, password } = this.loginForm.value;
-            if (this.authService.login(email, password)) {
-                const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/shop';
-                this.router.navigate([returnUrl]);
-            } else {
-                this.errorMessage = 'Invalid email or password. Password must be at least 6 characters.';
-            }
+            this.authService.login({ email, password }).subscribe({
+                next: () => {
+                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/shop';
+                    this.router.navigate([returnUrl]);
+                },
+                error: (err) => {
+                    this.errorMessage = err.error?.message || 'Invalid email or password. Please try again.';
+                    console.error('Login error:', err);
+                }
+            });
         } else {
             this.errorMessage = 'Please fill in all required fields correctly.';
             this.loginForm.markAllAsTouched();

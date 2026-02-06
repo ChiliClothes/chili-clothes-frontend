@@ -1,71 +1,86 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { SocialUser } from '@abacritt/angularx-social-login';
+import { Observable, tap } from 'rxjs';
+import { API_BASE_URL } from '../constants/api.constants';
+import { LoginDto, RegisterDto, AuthResponse } from '../models/auth.model';
 
 export interface User {
     email: string;
     name: string;
+    userId: string;
+    role: string;
 }
 
 @Injectable({
     providedIn: 'root',
 })
 export class AuthService {
-    private currentUser = signal<User | null>(null);
+    private http = inject(HttpClient);
     private router = inject(Router);
+
+    private currentUser = signal<User | null>(null);
+    private currentToken = signal<string | null>(null);
 
     // Public readonly signals
     user = this.currentUser.asReadonly();
-    isAuthenticated = computed(() => this.currentUser() !== null);
+    token = this.currentToken.asReadonly();
+    isAuthenticated = computed(() => this.currentToken() !== null);
 
     constructor() {
-        // Check for saved user in localStorage
-        this.loadUserFromStorage();
+        this.loadTokenFromStorage();
     }
 
-    private loadUserFromStorage() {
-        const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
+    private loadTokenFromStorage() {
+        const token = localStorage.getItem('token');
+        const userJson = localStorage.getItem('user');
+
+        if (token && userJson) {
             try {
-                this.currentUser.set(JSON.parse(savedUser));
+                this.currentToken.set(token);
+                this.currentUser.set(JSON.parse(userJson));
             } catch (e) {
-                console.error('Error loading user from storage', e);
-                localStorage.removeItem('currentUser');
+                console.error('Error loading auth from storage', e);
+                this.logout();
             }
         }
     }
 
-    login(email: string, password: string): boolean {
-        // Simple validation - In production, this would call an API
-        if (email && password.length >= 6) {
-            const user: User = {
-                email,
-                name: email.split('@')[0], // Extract name from email
-            };
-
-            this.currentUser.set(user);
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            return true;
-        }
-        return false;
+    login(dto: LoginDto): Observable<AuthResponse> {
+        return this.http.post<AuthResponse>(`${API_BASE_URL}/Auth/login`, dto).pipe(
+            tap(response => this.handleAuthResponse(response))
+        );
     }
 
-    loginWithSocialUser(socialUser: SocialUser): boolean {
-        if (!socialUser.email) {
-            return false;
-        }
+    register(dto: RegisterDto): Observable<any> {
+        return this.http.post(`${API_BASE_URL}/Auth/register`, dto);
+    }
+
+    private handleAuthResponse(response: AuthResponse) {
         const user: User = {
-            email: socialUser.email,
-            name: socialUser.name || 'Social User',
+            email: response.email,
+            name: response.name,
+            userId: response.userId,
+            role: response.role
         };
+
+        this.currentToken.set(response.token);
         this.currentUser.set(user);
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        return true;
+
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(user));
     }
 
     logout() {
+        this.currentToken.set(null);
         this.currentUser.set(null);
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('currentUser'); // Cleanup old mock key
         this.router.navigate(['/login']);
+    }
+
+    getToken(): string | null {
+        return this.currentToken();
     }
 }
