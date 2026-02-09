@@ -1,0 +1,15 @@
+<div class="text-[#E21D1D]"
+    [ngClass]="{'mb-4 flex justify-center': variant === 'default', 'mr-2': variant === 'small'}">
+    <svg fill="currentColor" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+        [ngClass]="{'w-20 h-20': variant === 'default', 'w-10 h-10': variant === 'small'}">
+        <path d="M50 5L56.5 37L88 20L71 50L100 66.5L68 66.5L85 95L50 78L15 95L32 66.5L0 66.5L29 50L12 20L43.5 37L50 5Z">
+        </path>
+    </svg>
+</div>
+<h1 class="font-display font-bold uppercase tracking-widest text-slate-900 transition-all duration-300" [ngClass]="{
+        'text-4xl': variant === 'default', 
+        'text-xl': variant === 'small',
+        'hidden md:block': responsive
+    }">
+    RHCP <span class="text-[#E21D1D]">Shop</span>
+</h1>
