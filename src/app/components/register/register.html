@@ -1,26 +1,23 @@
 <main class="w-full h-screen flex flex-col  justify-center items-center p-10">
 
     <div class="flex flex-col items-center mb-10">
-        <div class="mb-4 text-[#E21D1D]">
-            <svg fill="currentColor" height="80" viewBox="0 0 100 100" width="80" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M50 5L56.5 37L88 20L71 50L100 66.5L68 66.5L85 95L50 78L15 95L32 66.5L0 66.5L29 50L12 20L43.5 37L50 5Z">
-                </path>
-            </svg>
-        </div>
-        <h1 class="font-display text-4xl font-bold uppercase tracking-widest text-slate-900">
-            RHCP <span class="text-[#E21D1D]">Shop</span>
-        </h1>
+        <app-logo />
         <p class="text-slate-600 mt-2 font-medium tracking-tight">
             Access your official merchandise account
         </p>
     </div>
 
-    <form action="" class="w-1/4 p-10 bg-white rounded-lg shadow-lg space-y-6">
+    <form [formGroup]="form" (ngSubmit)="register()" class="w-1/4 p-10 bg-white rounded-lg shadow-lg space-y-6">
+
+        @if (errorMessage) {
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errorMessage }}</span>
+        </div>
+        }
 
         <div>
             <label class="block text-sm font-semibold uppercase tracking-wider text-slate-700 mb-2" for="name">
-                Name
+                NAME
             </label>
             <div class="relative group">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -29,8 +26,13 @@
                 </div>
                 <input
                     class="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded focus:ring-2 focus:ring-[#E21D1D]/20 focus:border-[#E21D1D] outline-none transition-all placeholder:text-slate-400"
-                    id="name" formControlName="name" placeholder="RHCP Shop" type="text" />
+                    id="name" placeholder="RHCP Shop" type="text" formControlName="name" required />
             </div>
+            @if (form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)) {
+            <div class="text-red-500 text-xs mt-1">
+                Name is required.
+            </div>
+            }
         </div>
 
         <div>
@@ -44,8 +46,18 @@
                 </div>
                 <input
                     class="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded focus:ring-2 focus:ring-[#E21D1D]/20 focus:border-[#E21D1D] outline-none transition-all placeholder:text-slate-400"
-                    id="email" formControlName="email" placeholder="flea@rhcp.com" type="email" />
+                    id="email" placeholder="flea@rhcp.com" type="email" formControlName="email" required />
             </div>
+            @if (form.get('email')?.invalid && (form.get('email')?.dirty || form.get('email')?.touched)) {
+            <div class="text-red-500 text-xs mt-1">
+                @if (form.get('email')?.errors?.['required']) {
+                <div>Email is required.</div>
+                }
+                @if (form.get('email')?.errors?.['email']) {
+                <div>Invalid email format.</div>
+                }
+            </div>
+            }
         </div>
 
         <div>
@@ -59,13 +71,23 @@
                 </div>
                 <input
                     class="block w-full pl-10 pr-4 py-3 bg-white border border-slate-200 text-slate-900 rounded focus:ring-2 focus:ring-[#E21D1D]/20 focus:border-[#E21D1D] outline-none transition-all placeholder:text-slate-400"
-                    id="password" formControlName="password" placeholder="••••••••" type="password" />
+                    id="password" placeholder="••••••••" type="password" formControlName="password" required />
             </div>
+            @if (form.get('password')?.invalid && (form.get('password')?.dirty || form.get('password')?.touched)) {
+            <div class="text-red-500 text-xs mt-1">
+                @if (form.get('password')?.errors?.['required']) {
+                <div>Password is required.</div>
+                }
+                @if (form.get('password')?.errors?.['minlength']) {
+                <div>Password must be at least 6 characters.</div>
+                }
+            </div>
+            }
         </div>
 
         <button
-            class="w-full bg-[#E21D1D] hover:bg-red-700 text-white font-display text-l font-bold py-4 rounded transition-all transform active:scale-[0.98] shadow-lg shadow-[#E21D1D]/20 uppercase tracking-widest"
-            type="submit">
+            class="w-full bg-[#E21D1D] hover:bg-red-700 text-white font-display text-l font-bold py-4 rounded transition-all transform active:scale-[0.98] shadow-lg shadow-[#E21D1D]/20 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
+            type="submit" [disabled]="form.invalid">
             Register Now
         </button>
     </form>

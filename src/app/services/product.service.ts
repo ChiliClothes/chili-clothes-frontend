@@ -1,5 +1,8 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { Product, Category } from '../models/product.model';
+import { HttpClient } from '@angular/common/http';
+
+
 
 @Injectable({
     providedIn: 'root',
@@ -49,9 +52,11 @@ export class ProductService {
         },
     ];
 
+    constructor(private http: HttpClient) { }
+
     private selectedCategory = signal<Category>('All');
     private searchQuery = signal<string>('');
-
+    private apiUrl = "http://localhost:5003";
     products = computed(() => {
         let filtered = this.allProducts;
 
@@ -83,5 +88,10 @@ export class ProductService {
 
     getCategory() {
         return this.selectedCategory();
+    }
+
+
+    getAllProductsAdmin() {
+        return this.http.get(this.apiUrl);
     }
 }

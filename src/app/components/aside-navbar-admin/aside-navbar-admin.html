@@ -1,1 +1,31 @@
-<p>aside-navbar-admin works!</p>
+<section
+    class="flex flex-col h-screen bg-white border-r border-slate-200 transition-all duration-300 w-20 md:w-64">
+    <aside class="flex flex-col gap-6 p-4">
+        <div class="flex flex-col items-center md:items-start">
+            <app-logo variant="small" [responsive]="true" class="flex items-center justify-center md:justify-start" />
+            <h3 class="hidden md:block mt-6 px-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                Admin Panel
+            </h3>
+        </div>
+        <nav class="w-full">
+            <ul class="flex flex-col space-y-2 mt-4">
+                <li routerLinkActive="bg-[#E21D1D] text-white shadow-lg shadow-red-500/30"
+                    [routerLinkActiveOptions]="{exact: true}"
+                    class="rounded-xl w-full text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer group">
+                    <a [routerLink]="dashboardLink" class="flex items-center p-3 gap-3">
+                        <span class="material-symbols-outlined text-2xl group-hover:scale-110 transition-transform">
+                            dashboard
+                        </span>
+                        <span class="hidden md:block font-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li routerLinkActive="bg-[#E21D1D] text-white shadow-lg shadow-red-500/30"
+                    class="rounded-xl w-full text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer group">
+                    <a [routerLink]="productsLink" class="flex items-center p-3 gap-3">
+                        <span class="hidden md:block font-medium">Products</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+</section>

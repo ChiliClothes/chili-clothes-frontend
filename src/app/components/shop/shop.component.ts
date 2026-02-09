@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from '../header/header.component';
+// import { HeaderComponent } from '../header/header.component';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component';
 import { ProductService } from '../../services/product.service';
@@ -14,7 +14,7 @@ import { Product, Category } from '../../models/product.model';
     imports: [
         CommonModule,
         FormsModule,
-        HeaderComponent,
+        // HeaderComponent,
         ProductCardComponent,
         ShoppingCartComponent,
     ],
