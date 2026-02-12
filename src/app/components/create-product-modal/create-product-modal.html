@@ -1,1 +1,110 @@
-<p>create-product-modal works!</p>
+<!-- Modal Backdrop -->
+@if (isOpen) {
+<div class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn"
+    (click)="closeModal()">
+    <!-- Modal Container -->
+    <div class="bg-white rounded-2xl w-[90%] max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl animate-slideUp"
+        (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div
+            class="sticky top-0 bg-white px-7 py-6 border-b border-gray-200 flex items-center justify-between rounded-t-2xl z-10">
+            <h2 class="text-2xl font-bold text-gray-900">Create New Product</h2>
+            <button type="button"
+                class="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-600 hover:text-gray-900"
+                (click)="closeModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="px-7 py-7">
+            <!-- Product Name -->
+            <div class="mb-6">
+                <label for="name" class="block mb-2 text-sm font-semibold text-gray-700">Product Name</label>
+                <input type="text" id="name" formControlName="name" placeholder="Enter product name"
+                    class="w-full px-4 py-3 border-2 rounded-xl text-base text-gray-900 transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                    [class.border-gray-200]="!(productForm.get('name')?.invalid && productForm.get('name')?.touched)"
+                    [class.border-red-500]="productForm.get('name')?.invalid && productForm.get('name')?.touched" />
+                @if (productForm.get('name')?.invalid && productForm.get('name')?.touched) {
+                <span class="block text-red-500 text-sm mt-1.5 font-medium">
+                    Product name is required (min 3 characters)
+                </span>
+                }
+            </div>
+
+            <!-- Product Description -->
+            <div class="mb-6">
+                <label for="description" class="block mb-2 text-sm font-semibold text-gray-700">Description</label>
+                <textarea id="description" formControlName="description" placeholder="Enter product description"
+                    rows="4"
+                    class="w-full px-4 py-3 border-2 rounded-xl text-base text-gray-900 transition-all resize-y min-h-[100px] focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                    [class.border-gray-200]="!(productForm.get('description')?.invalid && productForm.get('description')?.touched)"
+                    [class.border-red-500]="productForm.get('description')?.invalid && productForm.get('description')?.touched"></textarea>
+                @if (productForm.get('description')?.invalid && productForm.get('description')?.touched) {
+                <span class="block text-red-500 text-sm mt-1.5 font-medium">
+                    Description is required (min 10 characters)
+                </span>
+                }
+            </div>
+
+            <!-- Price and Stock Row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+                <!-- Product Price -->
+                <div>
+                    <label for="price" class="block mb-2 text-sm font-semibold text-gray-700">Price ($)</label>
+                    <input type="number" id="price" formControlName="price" placeholder="0.00" step="0.01" min="0"
+                        class="w-full px-4 py-3 border-2 rounded-xl text-base text-gray-900 transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                        [class.border-gray-200]="!(productForm.get('price')?.invalid && productForm.get('price')?.touched)"
+                        [class.border-red-500]="productForm.get('price')?.invalid && productForm.get('price')?.touched" />
+                    @if (productForm.get('price')?.invalid && productForm.get('price')?.touched) {
+                    <span class="block text-red-500 text-sm mt-1.5 font-medium">
+                        Valid price is required
+                    </span>
+                    }
+                </div>
+
+                <!-- Product Stock -->
+                <div>
+                    <label for="stock" class="block mb-2 text-sm font-semibold text-gray-700">Stock</label>
+                    <input type="number" id="stock" formControlName="stock" placeholder="0" min="0"
+                        class="w-full px-4 py-3 border-2 rounded-xl text-base text-gray-900 transition-all focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                        [class.border-gray-200]="!(productForm.get('stock')?.invalid && productForm.get('stock')?.touched)"
+                        [class.border-red-500]="productForm.get('stock')?.invalid && productForm.get('stock')?.touched" />
+                    @if (productForm.get('stock')?.invalid && productForm.get('stock')?.touched) {
+                    <span class="block text-red-500 text-sm mt-1.5 font-medium">
+                        Valid stock is required
+                    </span>
+                    }
+                </div>
+            </div>
+
+            <!-- Active Status -->
+            <div class="mb-7">
+                <label class="flex items-center cursor-pointer select-none">
+                    <input type="checkbox" formControlName="isActive"
+                        class="w-5 h-5 mr-2.5 cursor-pointer accent-blue-500" />
+                    <span class="font-medium text-gray-700">Active Product</span>
+                </label>
+            </div>
+
+            <!-- Modal Footer / Actions -->
+            <div class="flex justify-end gap-3 pt-6 border-t border-gray-200 mt-2">
+                <button type="button"
+                    class="px-6 py-3 rounded-xl text-base font-semibold bg-white text-gray-700 border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm"
+                    (click)="closeModal()">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-6 py-3 rounded-xl text-base font-semibold bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 hover:shadow-lg hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm"
+                    [disabled]="productForm.invalid || isSubmitting">
+                    {{ isSubmitting ? 'Creating...' : 'Create Product' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+}
