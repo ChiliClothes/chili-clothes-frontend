@@ -1,9 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { SocialAuthService, GoogleLoginProvider, GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
+import { LinkedInAuthService } from '../../services/linkedin-auth.service';
+import {
+    SocialAuthService,
+    GoogleLoginProvider,
+    FacebookLoginProvider,
+    GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
+import { Subscription, skip } from 'rxjs';
 
 @Component({
     selector: 'app-login',
@@ -11,7 +18,7 @@ import { SocialAuthService, GoogleLoginProvider, GoogleSigninButtonModule } from
     templateUrl: './login.component.html',
     styleUrl: './login.component.css',
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     loginForm: FormGroup;
     errorMessage = '';
 
@@ -19,6 +26,8 @@ export class LoginComponent implements OnInit {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
     private socialAuthService = inject(SocialAuthService);
+    private linkedInAuthService = inject(LinkedInAuthService);
+    private authSub?: Subscription;
 
     constructor(private fb: FormBuilder) {
         this.loginForm = this.fb.group({
@@ -29,7 +38,36 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Social auth state subscription removed to focus on Backend API integration
+        // skip(1) ignores the initial replay of the cached social user.
+        // This prevents auto-login when navigating to /login after logout.
+        // Only NEW auth state changes (from user clicking a social button) are processed.
+        this.authSub = this.socialAuthService.authState.pipe(skip(1)).subscribe((socialUser) => {
+            if (socialUser) {
+                const provider = socialUser.provider === 'GOOGLE' ? 'google' : 'facebook';
+                this.authService
+                    .socialLogin({
+                        provider,
+                        token: socialUser.idToken || socialUser.authToken || '',
+                    })
+                    .subscribe({
+                        next: () => {
+                            const returnUrl =
+                                this.route.snapshot.queryParams['returnUrl'] || '/shop';
+                            this.router.navigate([returnUrl]);
+                        },
+                        error: (err) => {
+                            this.errorMessage =
+                                err.error?.message ||
+                                `Failed to sign in with ${provider}. Please try again.`;
+                            console.error('Social login error:', err);
+                        },
+                    });
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.authSub?.unsubscribe();
     }
 
     onSubmit() {
@@ -44,9 +82,10 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([returnUrl]);
                 },
                 error: (err) => {
-                    this.errorMessage = err.error?.message || 'Invalid email or password. Please try again.';
+                    this.errorMessage =
+                        err.error?.message || 'Invalid email or password. Please try again.';
                     console.error('Login error:', err);
-                }
+                },
             });
         } else {
             this.errorMessage = 'Please fill in all required fields correctly.';
@@ -55,11 +94,21 @@ export class LoginComponent implements OnInit {
     }
 
     onGoogleLogin() {
-        console.log('Manual Google login trigger is blocked by GSI v2. Using official button overlay.');
+        console.log(
+            'Manual Google login trigger is blocked by GSI v2. Using official button overlay.'
+        );
     }
 
     onFacebookLogin() {
-        console.log('Facebook login clicked');
-        // Placeholder for future Facebook implementation
+        this.errorMessage = '';
+        this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).catch((err) => {
+            this.errorMessage = 'Facebook login failed. Please try again.';
+            console.error('Facebook signIn error:', err);
+        });
+    }
+
+    onLinkedInLogin() {
+        this.errorMessage = '';
+        this.linkedInAuthService.initiateLogin();
     }
 }

@@ -2,9 +2,12 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptor';
-import { SocialAuthServiceConfig, GoogleLoginProvider, SOCIAL_AUTH_CONFIG } from '@abacritt/angularx-social-login';
+import { SocialAuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider, SOCIAL_AUTH_CONFIG } from '@abacritt/angularx-social-login';
 
 import { routes } from './app.routes';
+
+// TODO: Replace with your actual Facebook App ID from https://developers.facebook.com/
+const FACEBOOK_APP_ID = 'YOUR_FACEBOOK_APP_ID';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +24,10 @@ export const appConfig: ApplicationConfig = {
             provider: new GoogleLoginProvider(
               '229584976685-umdbskt7m223taiu5lft8h5j97ug94vm.apps.googleusercontent.com'
             )
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(FACEBOOK_APP_ID)
           }
         ],
         onError: (err) => {

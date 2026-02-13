@@ -54,6 +54,11 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "headers": {
+              "Cross-Origin-Opener-Policy": "same-origin-allow-popups"
+            }
+          },
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {

@@ -16,3 +16,9 @@ export interface AuthResponse {
     name: string;
     role: string;
 }
+
+export interface SocialLoginDto {
+    provider: 'google' | 'facebook' | 'linkedin';
+    token: string;
+    authCode?: string;
+}

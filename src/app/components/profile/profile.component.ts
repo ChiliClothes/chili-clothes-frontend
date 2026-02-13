@@ -85,8 +85,8 @@ export class ProfileComponent implements OnInit {
         }
     }
 
-    cancelOrder(orderId: string) {
-        const id = parseInt(orderId.replace('RHCP-', ''));
+    cancelOrder(order: any) {
+        const id = typeof order.id === 'string' ? parseInt(order.id.split('-').pop() || '0') : order.id;
         if (confirm('Are you sure you want to cancel this order?')) {
             this.orderService.cancelOrder(id).subscribe({
                 next: () => this.loadOrderHistory(),

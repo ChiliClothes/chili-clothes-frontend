@@ -47,7 +47,7 @@
                             Details
                         </button>
                         @if (order.status.toLowerCase() !== 'cancelled' && order.status.toLowerCase() !== 'cancelado') {
-                        <button (click)="cancelOrder(order.id)"
+                        <button (click)="cancelOrder(order)"
                             class="px-6 py-3 border border-red-200 text-[#E21D1D] rounded font-display font-bold text-xs uppercase tracking-widest hover:bg-red-50 transition-all">
                             Cancel
                         </button>

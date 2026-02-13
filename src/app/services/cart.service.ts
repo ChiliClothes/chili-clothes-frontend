@@ -16,6 +16,25 @@ export class CartService {
     shipping = computed(() => (this.cartItems().length > 0 ? 9.0 : 0));
     total = computed(() => this.subtotal() + this.shipping());
 
+    constructor() {
+        this.loadCart();
+    }
+
+    private loadCart() {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            try {
+                this.cartItems.set(JSON.parse(savedCart));
+            } catch (e) {
+                console.error('Error parsing cart from localStorage', e);
+            }
+        }
+    }
+
+    private saveCart() {
+        localStorage.setItem('cart', JSON.stringify(this.cartItems()));
+    }
+
     addToCart(product: Product, size?: string, color?: string) {
         const existingItem = this.cartItems().find(
             (item) =>
@@ -30,6 +49,7 @@ export class CartService {
                 { product, quantity: 1, size, color },
             ]);
         }
+        this.saveCart();
     }
 
     updateQuantity(item: CartItem, quantity: number) {
@@ -41,13 +61,16 @@ export class CartService {
         this.cartItems.update((items) =>
             items.map((i) => (i === item ? { ...i, quantity } : i))
         );
+        this.saveCart();
     }
 
     removeItem(item: CartItem) {
         this.cartItems.update((items) => items.filter((i) => i !== item));
+        this.saveCart();
     }
 
     clearCart() {
         this.cartItems.set([]);
+        this.saveCart();
     }
 }

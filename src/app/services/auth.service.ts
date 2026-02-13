@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
-import { LoginDto, RegisterDto, AuthResponse } from '../models/auth.model';
+import { LoginDto, RegisterDto, AuthResponse, SocialLoginDto } from '../models/auth.model';
 
 export interface User {
     email: string;
@@ -54,6 +54,16 @@ export class AuthService {
 
     register(dto: RegisterDto): Observable<any> {
         return this.http.post(`${API_BASE_URL}/Auth/register`, dto);
+    }
+
+    socialLogin(dto: SocialLoginDto): Observable<AuthResponse> {
+        return this.http.post<AuthResponse>(`${API_BASE_URL}/Auth/login`, dto).pipe(
+            tap(response => this.handleAuthResponse(response))
+        );
+    }
+
+    reloadFromStorage() {
+        this.loadTokenFromStorage();
     }
 
     private handleAuthResponse(response: AuthResponse) {
