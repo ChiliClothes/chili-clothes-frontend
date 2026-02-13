@@ -1,3 +1,97 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@theme {
+    /* Custom Colors - Matching User Specifications */
+    --color-primary: #E21D1D;
+    --color-background-light: #F9FAFB;
+    --color-background-dark: #111111;
+    --color-card-light: #FFFFFF;
+    --color-card-dark: #1F1F1F;
+    --color-button-light: #F9FAFB;
+
+    /* Font Families */
+    --font-display: "Oswald", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-sans: "Inter", sans-serif;
+
+    /* Border Radius - Angular rock-and-roll feel */
+    --radius: 4px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-full: 9999px;
+}
+
+/* Global Styles */
+body {
+    font-family: var(--font-body);
+    background-color: var(--color-background-light);
+    min-height: 100vh;
+}
+
+html.dark body {
+    background-color: var(--color-background-dark);
+}
+
+::selection {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* Display Font Utility */
+.display-font {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+}
+
+/* Custom Modal Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Fix for Material SnackBar default black container */
+.cdk-overlay-pane:has(.custom-toast-container) {
+    max-width: fit-content !important;
+}
+
+.custom-toast-container.mat-mdc-snack-bar-container {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.custom-toast-container .mdc-snackbar__surface {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.custom-toast-container .mat-mdc-snack-bar-label {
+    padding: 0 !important;
+}

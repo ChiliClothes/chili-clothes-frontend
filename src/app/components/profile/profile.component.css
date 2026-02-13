@@ -1,0 +1,10 @@
+.asterisk-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuA5zo0gNnTfeLhqWwb1dSdVKJYJxx14QcicsSHOhxNiY1X0WwCRfbm8PuFr20Uha7M5Ecixns2ltqaEPiZHZTrQphw5R__t_DCn4K5P6D6mQ7o2YbjiWqk9r9WJ4uXM8SCFkQy30XHuVZ88Wzq8u5Ki0bMus2Tdfs3ENUBkCsT6AiWYw3p6Bxvds4_iTGA-WfzUB4pKxp0t7dkmEt6fNlVYZt_NyPT28Il76uYmygbJ1rlWkvD6vEnuU8CYUwoHK-NUGg6t3OYPms7p);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+:host {
+    display: block;
+}

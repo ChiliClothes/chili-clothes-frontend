@@ -1,0 +1,48 @@
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col lg:flex-row items-start gap-8">
+        <!-- Main Content -->
+        <div class="flex-grow">
+            <!-- Search and Title -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <h1 class="text-4xl display-font font-bold">OUR MERCH</h1>
+                <div class="relative w-full md:w-80">
+                    <span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                        search
+                    </span>
+                    <input [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange($event)"
+                        class="w-full pl-10 pr-4 py-2 bg-[#FFFFFF] border border-slate-200 rounded focus:ring-[#E21D1D] focus:border-[#E21D1D] outline-none transition-all"
+                        placeholder="Search gear..." type="text" />
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="flex flex-wrap gap-3 mb-8">
+                @for (category of categories; track category) {
+                <button (click)="selectCategory(category)"
+                    [class.bg-black]="isActiveCategory(category) && !themeService.isDarkMode()"
+                    [class.text-white]="isActiveCategory(category)"
+                    [style.background-color]="!isActiveCategory(category) ? '#FFFFFF' : ''"
+                    [class.border]="!isActiveCategory(category)" [class.border-slate-200]="!isActiveCategory(category)"
+                    class="px-6 py-2 rounded font-semibold display-font tracking-wide hover:bg-slate-100 transition-colors">
+                    {{ category }}
+                </button>
+                }
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @for (product of productService.products(); track product.id) {
+                <app-product-card [product]="product" (addToCart)="onAddToCart($event)"></app-product-card>
+                } @empty {
+                <div class="col-span-full text-center py-16 text-slate-400">
+                    <span class="material-icons text-6xl mb-4">search_off</span>
+                    <p class="text-lg">No products found</p>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Shopping Cart Sidebar -->
+        <app-shopping-cart></app-shopping-cart>
+    </div>
+</main>
