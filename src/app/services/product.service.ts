@@ -4,6 +4,8 @@ import { Observable, tap, BehaviorSubject, map } from 'rxjs';
 import { API_BASE_URL } from '../constants/api.constants';
 import { Product, Category } from '../models/product.model';
 
+
+
 @Injectable({
     providedIn: 'root',
 })
@@ -17,6 +19,7 @@ export class ProductService {
     // Public readable signals
     readonly productsList = this.productsSignal.asReadonly();
 
+    private apiUrl = "http://localhost:5003";
     products = computed(() => {
         let filtered = this.productsSignal();
 
@@ -65,5 +68,10 @@ export class ProductService {
 
     getCategory() {
         return this.selectedCategory();
+    }
+
+
+    getAllProductsAdmin() {
+        return this.http.get(`${API_BASE_URL}/Products`);
     }
 }

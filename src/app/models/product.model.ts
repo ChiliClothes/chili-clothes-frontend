@@ -7,7 +7,7 @@ export interface Product {
     price: number;
     stock: number;
     isActive: boolean;
-    image?: string; // Optional if backend doesn't provide it yet
+    imageUrl?: string;
     category?: Category; // Optional if backend doesn't provide it yet
     badge?: string;
 }

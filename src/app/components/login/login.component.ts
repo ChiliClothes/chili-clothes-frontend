@@ -51,9 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     })
                     .subscribe({
                         next: () => {
-                            const returnUrl =
-                                this.route.snapshot.queryParams['returnUrl'] || '/shop';
-                            this.router.navigate([returnUrl]);
+                            this.redirectUser();
                         },
                         error: (err) => {
                             this.errorMessage =
@@ -78,8 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             const { email, password } = this.loginForm.value;
             this.authService.login({ email, password }).subscribe({
                 next: () => {
-                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/shop';
-                    this.router.navigate([returnUrl]);
+                    this.redirectUser();
                 },
                 error: (err) => {
                     this.errorMessage =
@@ -110,5 +107,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     onLinkedInLogin() {
         this.errorMessage = '';
         this.linkedInAuthService.initiateLogin();
+    }
+
+    private redirectUser() {
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        if (returnUrl) {
+            this.router.navigateByUrl(returnUrl);
+            return;
+        }
+
+        const user = this.authService.user();
+        if (user?.role?.toUpperCase() === 'ADMIN') {
+            this.router.navigate(['/dashboard']);
+        } else {
+            this.router.navigate(['/shop']);
+        }
     }
 }

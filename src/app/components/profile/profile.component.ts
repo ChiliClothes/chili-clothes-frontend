@@ -1,13 +1,14 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order.model';
+import { OrderDetailModalComponent } from '../order-detail-modal/order-detail-modal.component';
 
 @Component({
     selector: 'app-profile',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, OrderDetailModalComponent],
     templateUrl: './profile.component.html',
     styleUrl: './profile.component.css'
 })
@@ -36,15 +37,24 @@ export class ProfileComponent implements OnInit {
     loadOrderHistory() {
         this.orderService.getOrders().subscribe({
             next: (orders) => {
-                const formattedOrders = orders.map(order => ({
-                    id: `RHCP-${order.id}`,
-                    date: new Date(order.orderDate).toLocaleDateString(),
-                    items: `${order.items.length} Items`,
-                    amount: `$${order.totalAmount.toFixed(2)}`,
-                    status: order.status,
-                    statusClass: this.getStatusClass(order.status),
-                    icon: this.getStatusIcon(order.status)
-                }));
+                console.log('Raw Orders Response:', orders);
+                const formattedOrders = orders.map(order => {
+                    const dateStr = order.createdAt || order.orderDate || new Date().toISOString();
+                    const total = order.total !== undefined ? order.total : (order.totalAmount || 0);
+                    // Handle missing items by checking both orderItems and items
+                    const itemsList = order.orderItems || order.items || [];
+                    const itemCount = itemsList.length;
+
+                    return {
+                        id: `RHCP-${order.id}`,
+                        date: new Date(dateStr).toLocaleDateString(),
+                        items: `${itemCount} Items`,
+                        amount: `$${total.toFixed(2)}`,
+                        status: order.status,
+                        statusClass: this.getStatusClass(order.status),
+                        icon: this.getStatusIcon(order.status)
+                    };
+                });
                 this.orders.set(formattedOrders);
             },
             error: (err) => console.error('Error loading orders', err)
@@ -89,10 +99,52 @@ export class ProfileComponent implements OnInit {
         const id = typeof order.id === 'string' ? parseInt(order.id.split('-').pop() || '0') : order.id;
         if (confirm('Are you sure you want to cancel this order?')) {
             this.orderService.cancelOrder(id).subscribe({
-                next: () => this.loadOrderHistory(),
-                error: (err) => console.error('Error cancelling order', err)
+                next: () => {
+                    alert('Order cancelled successfully.');
+                    this.loadOrderHistory();
+                },
+                error: (err) => {
+                    console.error('Error cancelling order', err);
+                    if (err.error && typeof err.error === 'string') {
+                        alert(`Failed to cancel: ${err.error}`);
+                    } else if (err.error && err.error.message) {
+                        alert(`Failed to cancel: ${err.error.message}`);
+                    } else {
+                        alert('Failed to cancel order. It might already be processed or shipped.');
+                    }
+                }
             });
         }
     }
+
+    // Modal Logic
+    @ViewChild(OrderDetailModalComponent) orderDetailModal!: OrderDetailModalComponent;
+    isModalOpen = false;
+    selectedOrderId: number | null = null;
+
+    openOrderDetails(order: any) {
+        console.log('Opening order details for:', order);
+        // Extract numeric ID from "RHCP-123" string
+        const id = typeof order.id === 'string' ? parseInt(order.id.split('-').pop() || '0') : order.id;
+        this.selectedOrderId = id;
+        this.isModalOpen = true;
+
+        // Use setTimeout to ensure view child is available if using *ngIf, 
+        // essentially waiting for the modal component to initialize
+        setTimeout(() => {
+            if (this.orderDetailModal) {
+                console.log('Loading details into modal...');
+                this.orderDetailModal.loadOrderDetails(id);
+            } else {
+                console.error('Modal component not found!');
+            }
+        });
+    }
+
+    closeModal() {
+        this.isModalOpen = false;
+        this.selectedOrderId = null;
+    }
 }
+
 

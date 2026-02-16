@@ -4,10 +4,7 @@
         <div class="flex-1">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                 <div class="flex items-center gap-3">
-                    <div
-                        class="bg-[#E21D1D] text-white p-2 rounded-full flex items-center justify-center shadow-lg shadow-[#E21D1D]/20">
-                        <span class="material-icons text-2xl">shopping_cart</span>
-                    </div>
+
                     <h1 class="font-display text-4xl font-bold uppercase tracking-widest text-[#0F172A]">
                         Recent <span class="text-[#E21D1D]">Orders</span>
                     </h1>
@@ -42,7 +39,7 @@
                         </span>
                     </div>
                     <div class="flex gap-3">
-                        <button
+                        <button (click)="openOrderDetails(order)"
                             class="px-6 py-3 border border-slate-200 rounded font-display font-bold text-xs uppercase tracking-widest hover:bg-slate-50 transition-all text-[#0F172A]">
                             Details
                         </button>
@@ -145,4 +142,9 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Order Detail Modal -->
+    <app-order-detail-modal [isOpen]="isModalOpen" [orderId]="selectedOrderId" (closeEvent)="closeModal()">
+    </app-order-detail-modal>
 </main>

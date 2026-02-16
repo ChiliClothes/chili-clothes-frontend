@@ -1,0 +1,12 @@
+<div class="relative flex items-center justify-center"
+    [ngClass]="{'mb-4': variant === 'default', 'mr-2': variant === 'small'}">
+    <img src="/rhcp-logo.jpg" alt="RHCP Logo" class="object-cover rounded-full  border-[#E21D1D] p-0.5 mr-2"
+        [ngClass]="{'w-20 h-20': variant === 'default', 'w-10 h-10': variant === 'small'}">
+    <h1 class="font-display font-bold uppercase tracking-widest text-slate-900 transition-all duration-300" [ngClass]="{
+        'text-4xl': variant === 'default', 
+        'text-xl': variant === 'small',
+        'hidden md:block': responsive
+    }">
+        RHCP <span class="text-[#E21D1D]">Shop</span>
+    </h1>
+</div>

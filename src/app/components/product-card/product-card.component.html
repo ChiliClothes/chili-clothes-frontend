@@ -2,7 +2,7 @@
     class="bg-[#FFFFFF] rounded-xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all duration-300">
     <!-- Product Image -->
     <div class="relative h-72 overflow-hidden bg-[#FFFFFF]">
-        <img [src]="product.image" [alt]="product.name"
+        <img [src]="product.imageUrl || 'assets/images/placeholder.jpg'" [alt]="product.name"
             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         @if (product.badge) {
         <span class="absolute top-4 left-4 bg-[#E21D1D] text-white text-xs font-bold display-font px-3 py-1">
