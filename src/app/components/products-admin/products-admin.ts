@@ -16,6 +16,7 @@ export class ProductsAdmin implements OnInit {
 
   productos: ProductAdmin[] = [];
   isModalOpen: boolean = false;
+  productToEdit: ProductAdmin | null = null;
   isLoading: boolean = false;
 
   constructor(
@@ -51,18 +52,47 @@ export class ProductsAdmin implements OnInit {
   }
 
   openCreateModal() {
+    this.productToEdit = null;
+    this.isModalOpen = true;
+  }
+
+  openEditModal(product: ProductAdmin) {
+    this.productToEdit = product;
     this.isModalOpen = true;
   }
 
   onProductCreated(newProduct: ProductAdmin) {
     this.productos.push(newProduct);
     this.toastService.success('Product created successfully!');
-    // Opcionalmente, recarga la lista de productos desde el servidor
     this.loadProducts();
+  }
+
+  onProductUpdated(updatedProduct: ProductAdmin) {
+    const index = this.productos.findIndex(p => p.id === updatedProduct.id);
+    if (index !== -1) {
+      this.productos[index] = updatedProduct;
+    }
+    this.loadProducts();
+  }
+
+  deleteProduct(product: ProductAdmin) {
+    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
+      this.productService.deleteProduct(product.id).subscribe({
+        next: () => {
+          this.toastService.success('Product deleted successfully');
+          this.productos = this.productos.filter(p => p.id !== product.id);
+        },
+        error: (err) => {
+          console.error('Error deleting product', err);
+          this.toastService.error('Failed to delete product');
+        }
+      });
+    }
   }
 
   onModalClosed() {
     this.isModalOpen = false;
+    this.productToEdit = null;
   }
 
 }

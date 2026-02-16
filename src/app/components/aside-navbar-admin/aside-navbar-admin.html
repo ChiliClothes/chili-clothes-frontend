@@ -1,5 +1,4 @@
-<section
-    class="flex flex-col h-screen bg-white border-r border-slate-200 transition-all duration-300 w-20 md:w-64">
+<section class="flex flex-col h-screen bg-white border-r border-slate-200 transition-all duration-300 w-20 md:w-64">
     <aside class="flex flex-col gap-6 p-4">
         <div class="flex flex-col items-center md:items-start">
             <app-logo variant="small" [responsive]="true" class="flex items-center justify-center md:justify-start" />
@@ -27,5 +26,14 @@
                 </li>
             </ul>
         </nav>
+        <div class="mt-auto p-4">
+            @if (authService.isAuthenticated()) {
+            <button (click)="authService.logout()"
+                class="flex items-center gap-1 text-[#E21D1D] hover:text-slate-500 transition-colors font-bold uppercase text-sm">
+                <span class="material-icons text-lg">logout</span>
+                Sign Out
+            </button>
+            }
+        </div>
     </aside>
 </section>

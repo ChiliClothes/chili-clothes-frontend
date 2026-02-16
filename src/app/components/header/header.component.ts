@@ -5,9 +5,11 @@ import { ThemeService } from '../../services/theme.service';
 import { CartService } from '../../services/cart.service';
 import { AuthService } from '../../services/auth.service';
 
+import { Logo } from '../logo/logo';
+
 @Component({
     selector: 'app-header',
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, Logo],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
 })
