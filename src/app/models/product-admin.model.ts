@@ -6,6 +6,7 @@ export interface ProductAdmin {
     stock: number;
     isActive: boolean;
     createdAt: Date;
+    imageUrl?: string;
 }
 
 

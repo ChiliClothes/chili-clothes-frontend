@@ -3,10 +3,12 @@ export type Category = 'All' | 'Apparel' | 'Music' | 'Accessories';
 export interface Product {
     id: number;
     name: string;
-    price: number;
-    image: string;
-    category: Category;
     description: string;
+    price: number;
+    stock: number;
+    isActive: boolean;
+    imageUrl?: string;
+    category?: Category; // Optional if backend doesn't provide it yet
     badge?: string;
 }
 

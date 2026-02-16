@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProductAdmin } from '../models/product-admin.model'
-import { environment } from '../../environments/environment';
+import { API_BASE_URL } from '../constants/api.constants';
 
 
 @Injectable({
@@ -14,18 +14,18 @@ export class ProductAdminService {
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<ProductAdmin[]> {
-    return this.http.get<ProductAdmin[]>(`${environment.apiUrl}/api/Products/admin/all`)
+    return this.http.get<ProductAdmin[]>(`${API_BASE_URL}/Products/admin/all`)
   }
 
   createProduct(product: ProductAdmin): Observable<ProductAdmin> {
-    return this.http.post<ProductAdmin>(`${environment.apiUrl}/api/Products`, product);
+    return this.http.post<ProductAdmin>(`${API_BASE_URL}/Products`, product);
   }
 
   updateProduct(id: number, product: ProductAdmin): Observable<ProductAdmin> {
-    return this.http.put<ProductAdmin>(`${environment.apiUrl}/api/Products/${id}`, product);
+    return this.http.put<ProductAdmin>(`${API_BASE_URL}/Products/${id}`, product);
   }
-  
+
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${environment.apiUrl}/api/Products/${id}`);
+    return this.http.delete<void>(`${API_BASE_URL}/Products/${id}`);
   }
 }
